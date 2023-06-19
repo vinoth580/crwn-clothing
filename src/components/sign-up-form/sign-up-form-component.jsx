@@ -1,12 +1,10 @@
 import { useState } from "react";
-
 import FormInput from '../form-input/form-input.component';
-
-import { createAuthUserWithEmailAndPassword, createUserDocumentFromAuth } from "../../utils/firebase/firebase.utils";
-
+import { createAuthUserWithEmailAndPassword, 
+        createUserDocumentFromAuth } from "../../utils/firebase/firebase.utils";
 import './sign-up-form.styles.scss';
-
 import Button from '../button/button.component';
+
 const defaultFormFields={
     displayName: '',
     email: '',
@@ -17,8 +15,12 @@ const defaultFormFields={
 const SignUpForm =() => {
     const [formFields, setFormFields] = useState(defaultFormFields);
     const {displayName,email,password,confirmPassword} = formFields;
+    
+    const resetFormFields = () => {
+        setFormFields(defaultFormFields);
+    };
 
-    console.log(formFields);
+    //console.log(formFields);
 
     const handleSubmit=async(event)=> {
         event.preventDefault();
@@ -35,7 +37,7 @@ const SignUpForm =() => {
             );
             
             await createUserDocumentFromAuth(user, { displayName });
-
+            resetFormFields();
 
         } catch(error) {
             if(error.code === 'auth/email-already-in-use') {
@@ -57,7 +59,8 @@ const SignUpForm =() => {
     
     return(
         <div className="sign-up-container">
-            <h1>Sign up with your email and password</h1>
+            <h2>Don't have an account?</h2>
+            <span>Sign up with your email and password</span>
             <form onSubmit={handleSubmit}>
             
                 <FormInput  label='Display Name'type='text' required onChange={handleChange} name='displayName' value={displayName}/>
